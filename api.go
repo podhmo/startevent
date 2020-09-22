@@ -28,14 +28,15 @@ type Config struct {
 
 func (c Config) Run(ctx context.Context, sentinel string) {
 	url := c.URL
+	if c.Logger == nil {
+		c.Logger = getLogger()
+	}
 	if c.Waiter == nil {
 		c.Waiter = &Waiter{
+			Logger:    c.Logger,
 			Check:     CheckByHTTPRequest(url, fmt.Errorf("fail")),
 			Durations: DurationsFromSecs([]float64{0.1, 0.2, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4, 12.8}),
 		}
-	}
-	if c.Logger == nil {
-		c.Logger = getLogger()
 	}
 
 	ch := c.Waiter.Start(ctx)
