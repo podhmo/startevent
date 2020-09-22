@@ -2,7 +2,6 @@ package startevent
 
 import (
 	"context"
-	"log"
 	"time"
 )
 
@@ -10,7 +9,7 @@ type Waiter struct {
 	Check     func(time.Time) error
 	Durations []time.Duration
 
-	Logger *log.Logger
+	Logger logger
 }
 
 func (w *Waiter) Start(ctx context.Context) <-chan time.Duration {

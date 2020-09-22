@@ -7,6 +7,7 @@ import (
 
 type logger interface {
 	Printf(string, ...interface{})
+	Fatalf(string, ...interface{})
 }
 
 var (
