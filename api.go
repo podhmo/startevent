@@ -3,7 +3,6 @@ package startevent
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 	"time"
 )
@@ -13,7 +12,7 @@ type Config struct {
 	Durations []time.Duration
 
 	Waiter *Waiter
-	Logger *log.Logger
+	Logger logger
 }
 
 func (c Config) Run(ctx context.Context, sentinel string) {
@@ -23,6 +22,9 @@ func (c Config) Run(ctx context.Context, sentinel string) {
 			Check:     HealthCheck(url, fmt.Errorf("fail")),
 			Durations: DurationsFromSecs([]float64{0.1, 0.2, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4, 12.8}),
 		}
+	}
+	if c.Logger == nil {
+		c.Logger = getLogger()
 	}
 
 	ch := c.Waiter.Start(ctx)
@@ -35,8 +37,8 @@ func (c Config) Run(ctx context.Context, sentinel string) {
 
 func (c Config) Release(sentinel string, d time.Duration) {
 	if err := os.Remove(sentinel); err != nil {
-		c.Logger.Println("ng", d, err)
+		c.Logger.Printf("ng	duration=%s	err=%s", d, err)
 		return
 	}
-	c.Logger.Println("ok", d, sentinel)
+	c.Logger.Printf("ok	duration=%s	file=%s", d, sentinel)
 }
