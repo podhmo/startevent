@@ -8,6 +8,10 @@ import (
 
 func CheckByHTTPRequest(url string, failErr error) func(time.Time) error {
 	return func(t time.Time) error {
+		if debug {
+			getLogger().Printf("tick %s: %s", t, url)
+		}
+
 		res, err := http.Get(url)
 		if err != nil {
 			return err

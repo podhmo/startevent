@@ -22,11 +22,14 @@ func (w *Waiter) Start(ctx context.Context) <-chan time.Duration {
 		defer func() {
 			panicErr := recover()
 			if panicErr != nil {
-				log.Fatalf("!!%+v", panicErr)
+				w.Logger.Fatalf("!!%+v", panicErr)
 			}
 		}()
 
 		for _, duration := range w.Durations {
+			if debug {
+				w.Logger.Printf("wait: %s", duration)
+			}
 			select {
 			case <-ctx.Done():
 				return
@@ -39,7 +42,7 @@ func (w *Waiter) Start(ctx context.Context) <-chan time.Duration {
 		}
 
 		// timeout
-		log.Printf("timeout: %s", time.Now().Sub(st))
+		w.Logger.Printf("timeout: %s", time.Now().Sub(st))
 	}()
 	return finishCH
 }

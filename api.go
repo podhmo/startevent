@@ -4,8 +4,19 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 )
+
+var (
+	debug bool
+)
+
+func init() {
+	if os.Getenv("DEBUG") != "" {
+		debug, _ = strconv.ParseBool(os.Getenv("DEBUG"))
+	}
+}
 
 type Config struct {
 	URL       string
