@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func HealthCheck(url string, failErr error) func(time.Time) error {
+func CheckByHTTPRequest(url string, failErr error) func(time.Time) error {
 	return func(t time.Time) error {
 		res, err := http.Get(url)
 		if err != nil {
