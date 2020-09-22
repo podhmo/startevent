@@ -1,3 +1,5 @@
+package startevent
+
 import (
 	"context"
 	"log"
